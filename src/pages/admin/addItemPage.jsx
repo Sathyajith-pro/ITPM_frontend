@@ -55,10 +55,10 @@ export default function AddItemPage() {
             name:productName,
             price:productPrice,
             category:productCategory,
-            dateAdded:eventDate,
+            dateAdded:eventDate, //newly added time & dates
             timeAdded:eventTime,
             description:productDescription,
-            dimension:productDimension,
+            dimension:productDimension, 
             image : imageUrls  //transfer images to backend
         },{
             headers :{
