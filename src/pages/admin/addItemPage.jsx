@@ -29,6 +29,8 @@ export default function AddItemPage() {
       //   toast.error("You can only upload 25 images at at a time")
       //   break;
       // }
+
+      //add validations addItem form
     }
 
    
