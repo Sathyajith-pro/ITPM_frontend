@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ProductCard from "../../components/productCard";
+import { motion } from "framer-motion";
 
 export default function Items() {
   const [state, setState] = useState("loading"); // loading, success, error
@@ -10,7 +11,7 @@ export default function Items() {
   const [selectedCategory, setSelectedCategory] = useState("all"); // Track selected category
   const [searchQuery, setSearchQuery] = useState(""); // For search functionality
 
-  const categories = ["all", "concert", "theatre", "family & others"];
+  const categories = ["all", "concert", "theratre", "family & others"];
 
   useEffect(() => {
     if (state === "loading") {
@@ -66,36 +67,119 @@ export default function Items() {
     // The search filtering is already handled in the useEffect
   };
 
+  // Animation variants
+  const heroVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.3,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  };
+
+  const searchVariants = {
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 15,
+        delay: 0.5,
+      },
+    },
+  };
+
   return (
     <div className="w-full min-h-screen bg-gray-50">
-      {/* Hero Section with Search Bar - Purple Design */}
-      <div className="bg-indigo-900 text-white py-12 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-3">Let's Book Your Event</h1>
-          <p className="text-lg opacity-90 mb-8">
-            Book live events and discover concerts, events, theater and more.
-          </p>
+      {/* Animated Hero Section with Search Bar - Purple Design */}
+      <motion.div 
+        className="bg-indigo-900 text-white py-12 px-4 overflow-hidden relative"
+        initial="hidden"
+        animate="visible"
+        variants={heroVariants}
+      >
+        {/* Background Animation Elements */}
+        <motion.div 
+          className="absolute top-0 left-0 w-64 h-64 rounded-full bg-indigo-600 opacity-20"
+          animate={{ 
+            x: [0, 10, 0], 
+            y: [0, 15, 0],
+          }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 8,
+            ease: "easeInOut" 
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-0 right-0 w-80 h-80 rounded-full bg-orange-500 opacity-10"
+          animate={{ 
+            x: [0, -20, 0], 
+            y: [0, -10, 0],
+          }}
+          transition={{ 
+            repeat: Infinity, 
+            duration: 10,
+            ease: "easeInOut" 
+          }}
+        />
+        
+        <div className="max-w-6xl mx-auto text-center relative z-10">
+          <motion.h1 
+            className="text-3xl md:text-5xl font-bold mb-3"
+            variants={itemVariants}
+          >
+            Let's Book Your Event
+          </motion.h1>
           
-          {/* Search Form */}
-          <form onSubmit={handleSearchSubmit} className="max-w-2xl mx-auto flex justify-center">
+          <motion.p 
+            className="text-lg md:text-xl opacity-90 mb-8"
+            variants={itemVariants}
+          >
+            Book live events and discover concerts, events, theater and more.
+          </motion.p>
+          
+          {/* Animated Search Form */}
+          <motion.form 
+            onSubmit={handleSearchSubmit} 
+            className="max-w-2xl mx-auto flex justify-center"
+            variants={searchVariants}
+          >
             <input
               type="text"
               placeholder="Search for Events, Artists, Venues"
               value={searchQuery}
               onChange={handleSearch}
-              className="w-full py-3 px-6 rounded-l-lg focus:outline-none text-gray-800"
+              className="w-full py-3 px-6 rounded-l-lg focus:outline-none text-gray-800 shadow-lg"
             />
             <button 
               type="submit" 
-              className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded-r-lg flex items-center transition-colors"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 py-3 rounded-r-lg flex items-center transition-colors shadow-lg"
             >
               Search
-              <svg 
+              <motion.svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="h-5 w-5 ml-2" 
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
+                animate={{ rotate: [0, 10, 0] }}
+                transition={{ duration: 1, repeat: Infinity, repeatDelay: 5 }}
               >
                 <path 
                   strokeLinecap="round" 
@@ -103,16 +187,37 @@ export default function Items() {
                   strokeWidth={2} 
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
                 />
-              </svg>
+              </motion.svg>
             </button>
-          </form>
+          </motion.form>
+          
+          {/* Event type indicators */}
+          <motion.div 
+            className="flex flex-wrap justify-center mt-8 gap-3"
+            variants={itemVariants}
+          >
+            {categories.slice(1).map((cat) => (
+              <motion.span 
+                key={cat}
+                className="bg-white/10 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-medium"
+                whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.2)' }}
+              >
+                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+              </motion.span>
+            ))}
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Category Filter UI */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <motion.div 
+          className="bg-white rounded-lg shadow-md p-6 mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+        >
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Filter by Category</h2>
           <div className="flex flex-wrap gap-3">
             {categories.map((category) => (
@@ -129,7 +234,7 @@ export default function Items() {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Loading State */}
         {state === "loading" && (
@@ -165,9 +270,33 @@ export default function Items() {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <motion.div 
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    when: "beforeChildren",
+                    staggerChildren: 0.1
+                  }
+                }
+              }}
+            >
               {items.length > 0 ? (
-                items.map((item) => <ProductCard key={item.key} item={item} />)
+                items.map((item) => (
+                  <motion.div 
+                    key={item.key}
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+                    }}
+                  >
+                    <ProductCard item={item} />
+                  </motion.div>
+                ))
               ) : (
                 <div className="col-span-full bg-gray-50 border border-gray-200 rounded-lg p-12 text-center">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -191,7 +320,7 @@ export default function Items() {
                   </button>
                 </div>
               )}
-            </div>
+            </motion.div>
           </>
         )}
       </div>
