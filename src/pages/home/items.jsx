@@ -121,7 +121,7 @@ export default function Items() {
                 onClick={() => handleCategoryChange(category)}
                 className={`px-5 py-2.5 rounded-full font-medium transition-all duration-200 transform hover:scale-105 ${
                   selectedCategory === category
-                    ? "bg-green-600 text-white shadow-md"
+                    ? "bg-orange-500 text-white shadow-md"
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
