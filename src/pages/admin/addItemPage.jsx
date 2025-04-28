@@ -79,7 +79,7 @@ export default function AddItemPage() {
         toast.error("You are not authorized to do action")
     }
   }
-
+//   console.log(productImages);
   return (
     <div className="w-full h-full flex flex-col items-center p-4">
     <h1 className="text-lg font-bold mb-4">Add Items</h1>
