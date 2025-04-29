@@ -10,172 +10,197 @@ export default function AddItemPage() {
   const [productPrice, setProductPrice] = useState("");
   const [eventDate, setEventDate] = useState("");
   const [eventTime, setEventTime] = useState("");
-  const [productCategory, setProductCategory] = useState("concert");
+  const [productCategory, setProductCategory] = useState("Concert");
   const [productDimension, setProductDimension] = useState("");
   const [productDescription, setProductDescription] = useState("");
-  const [productImages,setProductImages] = useState([]);
+  const [productImages, setProductImages] = useState([]);
   const navigate = useNavigate();
 
   async function handleAddItem() {
-    const promises= []
-
-    for(let i=0; i<productImages.length;i++){
-      console.log(productImages[i]);
-      const Promise = mediaUpload(productImages[i])
-      promises.push(Promise);
-
-      //---Only 5 images can upload---
-      // if(i==5){
-      //   toast.error("You can only upload 25 images at at a time")
-      //   break;
-      // }
-
-      //add validations addItem form
+    // --- Basic Form Validation ---
+    if (
+      !productKey ||
+      !productName ||
+      !productPrice ||
+      !eventDate ||
+      !eventTime ||
+      !productCategory ||
+      !productDimension ||
+      !productDescription
+    ) {
+      toast.error("Please fill in all fields");
+      return;
     }
 
-   
-      console.log( productKey,productName,productPrice,productCategory,productDimension,productDescription);
-    const token = localStorage.getItem("token")
-  
+    if (productImages.length === 0) {
+      toast.error("Please upload at least one image");
+      return;
+    }
 
-    if(token){
-        try{
+    if (productImages.length > 5) {
+      toast.error("You can only upload a maximum of 5 images");
+      return;
+    }
 
-    //---promises run  . then methode---
+    const promises = [];
+    for (let i = 0; i < productImages.length; i++) {
+      const uploadPromise = mediaUpload(productImages[i]);
+      promises.push(uploadPromise);
+    }
 
-    // Promise.all(Promises).then((result)=>{
-    //   console.log(result)
+    const token = localStorage.getItem("token");
 
-    // }).catch((err)=>{
-    //   toast.error(err)
-    // });
+    if (token) {
+      try {
+        const imageUrls = await Promise.all(promises);
 
-    const imageUrls = await Promise.all(promises);  //async awit methode (get image urls)
-    
-      const result= await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/products`,{
-            key:productKey,
-            name:productName,
-            price:productPrice,
-            category:productCategory,
-            dateAdded:eventDate, //newly added time & dates
-            timeAdded:eventTime,
-            description:productDescription,
-            dimension:productDimension, 
-            image : imageUrls  //transfer images to backend
-        },{
-            headers :{
-                Authorization : "Bearer "+ token
-            }
-        });
+        const result = await axios.post(
+          `${import.meta.env.VITE_BACKEND_URL}/api/products`,
+          {
+            key: productKey,
+            name: productName,
+            price: productPrice,
+            category: productCategory,
+            dateAdded: eventDate,
+            timeAdded: eventTime,
+            description: productDescription,
+            dimension: productDimension,
+            image: imageUrls,
+          },
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
         toast.success(result.data.message);
         navigate("/admin/items");
-
-    }catch(err){
-        toast.error("product not added ");
-        
-    }
-        
-    }else{
-        toast.error("You are not authorized to do action")
+      } catch (err) {
+        toast.error("Product not added. Please try again.");
+      }
+    } else {
+      toast.error("You are not authorized to perform this action");
     }
   }
-//   console.log(productImages);
+
   return (
     <div className="w-full h-full flex flex-col items-center p-4">
-    <h1 className="text-lg font-bold mb-4">Add Items</h1>
-    <div className="w-[400px] border p-4 flex flex-col items-center gap-2 rounded-lg shadow-md ">
-      <input 
-        type="text"
-        placeholder="Event Key"
-        value={productKey}
-        onChange={(e) => setProductKey(e.target.value)}
-        className="w-full p-2 border rounded placeholder-gray-500"
-      />
-      <input
-        type="text"
-        placeholder="Event Name"
-        value={productName}
-        onChange={(e) => setProductName(e.target.value)}
-        className="w-full p-2 border rounded placeholder-gray-500"
-      />
-      <input
-        type="number"
-        placeholder="Product Price"
-        value={productPrice}
-        onChange={(e) => setProductPrice(e.target.value)}
-        className="w-[300px] p-2 border rounded placeholder-gray-500"
-      />
+      <h1 className="text-lg font-bold mb-4">Add New Event</h1>
+      <div className="w-[400px] border p-4 flex flex-col items-center gap-3 rounded-lg shadow-md">
 
+        <label className="w-full">
+          Event Key
+          <input
+            type="text"
+            value={productKey}
+            onChange={(e) => setProductKey(e.target.value)}
+            className="w-full mt-1 p-2 border rounded"
+            placeholder="Enter event key"
+          />
+        </label>
 
-   <input
-        type="text"
-        placeholder="Event Date"
-        value={eventDate}
-        onChange={(e) => setEventDate(e.target.value)}
-        className="w-full p-2 border rounded placeholder-gray-500"
-      />
+        <label className="w-full">
+          Event Name
+          <input
+            type="text"
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
+            className="w-full mt-1 p-2 border rounded"
+            placeholder="Enter event name"
+          />
+        </label>
 
-<input
-        type="text"
-        placeholder="Event Time"
-        value={eventTime}
-        onChange={(e) => setEventTime(e.target.value)}
-        className="w-full p-2 border rounded placeholder-gray-500"
-      />
+        <label className="w-full">
+          Event Price
+          <input
+            type="number"
+            value={productPrice}
+            onChange={(e) => setProductPrice(e.target.value)}
+            className="w-full mt-1 p-2 border rounded"
+            placeholder="Enter ticket price"
+            min="0"
+          />
+        </label>
 
+        <label className="w-full">
+          Event Date
+          <input
+            type="date"
+            value={eventDate}
+            onChange={(e) => setEventDate(e.target.value)}
+            className="w-full mt-1 p-2 border rounded"
+          />
+        </label>
 
+        <label className="w-full">
+          Event Time
+          <input
+            type="time"
+            value={eventTime}
+            onChange={(e) => setEventTime(e.target.value)}
+            className="w-full mt-1 p-2 border rounded"
+          />
+        </label>
 
+        <label className="w-full">
+          Category
+          <select
+            value={productCategory}
+            onChange={(e) => setProductCategory(e.target.value)}
+            className="w-full mt-1 p-2 border rounded"
+          >
+            <option value="Concert">Concert</option>
+            <option value="Theatre">Theatre</option>
+            <option value="Family & Others">Family & Others</option>
+          </select>
+        </label>
 
+        <label className="w-full">
+          Event Venue
+          <input
+            type="text"
+            value={productDimension}
+            onChange={(e) => setProductDimension(e.target.value)}
+            className="w-full mt-1 p-2 border rounded"
+            placeholder="Enter venue/location"
+          />
+        </label>
 
+        <label className="w-full">
+          Event Description
+          <textarea
+            value={productDescription}
+            onChange={(e) => setProductDescription(e.target.value)}
+            className="w-full mt-1 p-2 border rounded"
+            placeholder="Enter event description"
+          />
+        </label>
 
+        <label className="w-full">
+          Upload Images (max 5)
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e) => setProductImages(e.target.files)}
+            className="w-full mt-1 p-2 border rounded"
+          />
+        </label>
 
-      <select
-        value={productCategory}
-        onChange={(e) => setProductCategory(e.target.value)}
-        className="w-[300px] p-2 border rounded placeholder-gray-500"
-      >
-        <option value="Concert">Concert</option>
-        <option value="Theratre">Theratre</option>
-        <option value="Family & Others">Family & Others</option>
-      </select>
-      <input
-        type="text"
-        placeholder="Event Venue"
-        value={productDimension}
-        onChange={(e) => setProductDimension(e.target.value)}
-        className="w-full p-2 border rounded placeholder-gray-500"
-      />
-      <input
-        type="text"
-        placeholder="Event Description"
-        value={productDescription}
-        onChange={(e) => setProductDescription(e.target.value)}
-        className="w-full p-2 border rounded placeholder-gray-500"
-      />
-      <input
-        type="file"
-        multiple
-        onChange={(e) => {
-          setProductImages(e.target.files);
-        }}
-        className="w-full p-2 border rounded "
-      />
-      <button
-        onClick={handleAddItem}
-        className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        Add
-      </button>
-      <button
-        onClick={() => {
-          navigate("/admin/items");
-        }}
-        className="w-full p-2 bg-red-500 text-white rounded hover:bg-red-600"
-      >
-        Cancel
-      </button>
+        <button
+          onClick={handleAddItem}
+          className="w-full p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Add Event
+        </button>
+
+        <button
+          onClick={() => navigate("/admin/items")}
+          className="w-full p-2 bg-gray-400 text-white rounded hover:bg-gray-500"
+        >
+          Cancel
+        </button>
+      </div>
     </div>
-  </div>
   );
-  
 }

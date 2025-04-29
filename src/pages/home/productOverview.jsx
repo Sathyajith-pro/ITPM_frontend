@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ImageSlider from "../../components/imageSlider";
 import { ShoppingCart, Clock, MapPin, Calendar, ArrowLeft, Share2, Heart } from "lucide-react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import EventCountdown from "../../components/EventCountdown"; // Import the new component
 
 export default function ProductOverview() {
     const navigate = useNavigate();
@@ -77,12 +78,12 @@ export default function ProductOverview() {
                         <span className="text-gray-800 font-medium">{product.name}</span>
                     </nav>
                     
-                    <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
+                    <div className="bg-white shadow-xl rounded-2xl overflow-hidden flex flex-col  ">
                         {/* Main content */}
-                        <div className="md:flex">
+                        <div className="md:flex ">
                             {/* Left: Image slider */}
                             <div className="md:w-1/2 relative">
-                                <div className="relative aspect-video md:aspect-square w-full overflow-hidden">
+                                <div className="relative aspect-video md:aspect-square w-full overflow-hidden ">
                                     <ImageSlider images={product.image} />
                                 </div>
                                 <div className="absolute top-4 left-4 flex space-x-2">
@@ -118,6 +119,9 @@ export default function ProductOverview() {
                                         <span className="text-gray-700">{product.timeAdded || "Time"} PM</span>
                                     </div>
                                 </div>
+
+                                {/* Event Countdown Timer */}
+                                <EventCountdown eventDate={product.eventDate || product.dateAdded} />
                                 
                                 <div className="bg-gray-50 p-4 rounded-lg mb-6">
                                     <div className="text-2xl font-bold text-blue-600 mb-1">LKR {product.price}</div>
