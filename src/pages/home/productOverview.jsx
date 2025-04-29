@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ImageSlider from "../../components/imageSlider";
 import { ShoppingCart, Clock, MapPin, Calendar, ArrowLeft, Share2, Heart } from "lucide-react";
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 export default function ProductOverview() {
     const navigate = useNavigate();
@@ -12,12 +13,29 @@ export default function ProductOverview() {
     const [loadingStatus, setLoadingStatus] = useState("loading");
     const [product, setProduct] = useState({});
     
+    // Default map center (you can update this with actual venue coordinates)
+    const [mapCenter, setMapCenter] = useState({
+        lat: 6.9271,  // Default to Colombo, Sri Lanka
+        lng: 79.8612
+    });
+    
+    // Map container style
+    const mapContainerStyle = {
+        width: '100%',
+        height: '100%',
+    };
+    
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${key}`)
             .then((res) => {
                 setProduct(res.data);
                 setLoadingStatus("loaded");
                 console.log(res.data);
+                
+                // If product has location coordinates, update map center
+                if (res.data.coordinates) {
+                    setMapCenter(res.data.coordinates);
+                }
             })
             .catch((err) => {
                 console.log(err);
@@ -84,7 +102,7 @@ export default function ProductOverview() {
                             
                             {/* Right: Event Details */}
                             <div className="md:w-1/2 p-6 md:p-8">
-                                <h1 className="text-3xl font-bold text-gray-800 mb-3">{product.name}</h1>
+                                <h1 className="text-3xl font-bold text-gray-800 mb-3 ">{product.name}</h1>
                                 
                                 <div className="flex flex-wrap items-center mb-6">
                                     <div className="flex items-center mr-6 mb-2">
@@ -131,34 +149,45 @@ export default function ProductOverview() {
                             <div className="grid md:grid-cols-2 gap-4">
                                 <div className="bg-blue-50 p-4 rounded-lg">
                                     <h3 className="font-semibold text-blue-800 mb-2">Event Type</h3>
-                                    <p className="text-gray-700">{product.category || "Concert"}</p>
+                                    <p className="text-gray-700 flex items-center justify-center text-xl font-semibold">{product.category || "Concert"}</p>
                                 </div>
-                                <div className="bg-blue-50 p-4 rounded-lg">
+                                <div className="bg-blue-50 p-4 rounded-lg ">
                                     <h3 className="font-semibold text-blue-800 mb-2">Duration</h3>
-                                    <p className="text-gray-700">3 hours</p>
+                                    <p className="text-gray-700 flex items-center justify-center text-xl font-semibold">3 hours</p>
                                 </div>
                                 <div className="bg-blue-50 p-4 rounded-lg">
                                     <h3 className="font-semibold text-blue-800 mb-2">Age Restriction</h3>
-                                    <p className="text-gray-700">All ages</p>
+                                    <p className="text-gray-700 flex items-center justify-center text-xl font-semibold">All ages</p>
                                 </div>
                                 <div className="bg-blue-50 p-4 rounded-lg">
                                     <h3 className="font-semibold text-blue-800 mb-2">Language</h3>
-                                    <p className="text-gray-700">English</p>
+                                    <p className="text-gray-700 flex items-center justify-center text-xl font-semibold ">English</p>
                                 </div>
                             </div>
                         </div>
                         
-                        {/* Map placeholder */}
+                        {/* Google Map section */}
                         <div className="p-6 md:p-8 border-t border-gray-200">
                             <h2 className="text-xl font-bold text-gray-800 mb-4">Event Location</h2>
-                            <div className="bg-gray-200 rounded-lg overflow-hidden h-64 relative">
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className="text-gray-500">Map loading...</span>
-                                </div>
+                            <div className="rounded-lg overflow-hidden h-64 relative">
+                                <LoadScript googleMapsApiKey="AIzaSyA4zwIxxevGwklfkqcejpuAlcFTHIzolbU">
+                                    <GoogleMap
+                                        mapContainerStyle={mapContainerStyle}
+                                        center={mapCenter}
+                                        zoom={15}
+                                        options={{
+                                            mapTypeControl: false,
+                                            streetViewControl: false,
+                                            fullscreenControl: true,
+                                        }}
+                                    >
+                                        <Marker position={mapCenter} />
+                                    </GoogleMap>
+                                </LoadScript>
                             </div>
                             <div className="mt-4 text-gray-600">
                                 <p className="font-medium">{product.dimension || "Event Venue"}</p>
-                                <p>123 Event Street, Colombo</p>
+                                <p>{product.address || "123 Event Street, Colombo"}</p>
                             </div>
                         </div>
                     </div>
