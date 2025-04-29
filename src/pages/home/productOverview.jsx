@@ -114,10 +114,20 @@ export default function ProductOverview() {
                                 </div>
                                 
                                 <div className="flex flex-col space-y-3 md:flex-row md:space-y-0 md:space-x-4">
-                                    <button onClick ={()=>{navigate("/addstocks")}}  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium flex justify-center items-center transition-colors">
-                                        <ShoppingCart className="w-5 h-5 mr-2" />
-                                        Book Now
-                                    </button>
+                                <button 
+  onClick={() => {
+    navigate("/details", {
+      state: {
+        price: product.price,
+        event: product.name
+      }
+    });
+  }}  
+  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium flex justify-center items-center transition-colors"
+>
+  <ShoppingCart className="w-5 h-5 mr-2" />
+  Book Now
+</button>
                                     <button className="flex-1 border border-blue-600 text-blue-600 hover:bg-blue-50 py-3 px-6 rounded-lg font-medium transition-colors">
                                         Add to Cart
                                     </button>

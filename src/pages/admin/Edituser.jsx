@@ -16,7 +16,7 @@ export default function Edituser() {
     const fetchUser = async () => {
       try {
         console.log("Fetching details for:", name);
-        const response = await axios.get(`http://localhost:5001/supplier/get/${name}`);
+        const response = await axios.get(`http://localhost:3002/supplier/get/${name}`);
         setUser(response.data);  
         setLoading(false);
       } catch (error) {
@@ -32,11 +32,11 @@ export default function Edituser() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Sending request to:", `http://localhost:5001/supplier/update/${name}`);
+    console.log("Sending request to:", `http://localhost:3002/supplier/update/${name}`);
     console.log("Data being sent:", user);
 
     try {
-      const response = await axios.put(`http://localhost:5001/supplier/update/${name}`, user, {
+      const response = await axios.put(`http://localhost:3002/supplier/update/${name}`, user, {
         headers: { "Content-Type": "application/json" },
       });
 
