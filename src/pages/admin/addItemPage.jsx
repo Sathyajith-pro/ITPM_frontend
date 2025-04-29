@@ -29,6 +29,8 @@ export default function AddItemPage() {
       //   toast.error("You can only upload 25 images at at a time")
       //   break;
       // }
+
+      //add validations addItem form
     }
 
    
@@ -55,10 +57,10 @@ export default function AddItemPage() {
             name:productName,
             price:productPrice,
             category:productCategory,
-            dateAdded:eventDate,
+            dateAdded:eventDate, //newly added time & dates
             timeAdded:eventTime,
             description:productDescription,
-            dimension:productDimension,
+            dimension:productDimension, 
             image : imageUrls  //transfer images to backend
         },{
             headers :{
@@ -77,7 +79,7 @@ export default function AddItemPage() {
         toast.error("You are not authorized to do action")
     }
   }
-
+//   console.log(productImages);
   return (
     <div className="w-full h-full flex flex-col items-center p-4">
     <h1 className="text-lg font-bold mb-4">Add Items</h1>
