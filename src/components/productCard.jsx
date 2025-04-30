@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Calendar, Clock, MapPin, Users, ChevronRight } from "lucide-react";
 
+//Create a ProductCard component
+
 export default function ProductCard({ item }) {
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 m-4 max-w-sm h-[470px] border border-gray-100 flex flex-col">
