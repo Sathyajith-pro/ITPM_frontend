@@ -6,7 +6,7 @@ export default function Profile() {
     const [users, setUsers] = useState("loading");
     const [usersLoaded, setUserLoaded] = useState(false);
     const navigate = useNavigate();
-
+//profile error resolved
     useEffect(() => {
         if (!usersLoaded) {
             const token = localStorage.getItem("token");
