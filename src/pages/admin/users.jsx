@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 export default function Users() {
     const [users,setUsers] = useState("loading")
      const [usersloaded, setUserLoaded] = useState(false);
-
+//add use effect for state management
     useEffect(() => {
     
         if(!usersloaded){
