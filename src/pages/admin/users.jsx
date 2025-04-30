@@ -24,7 +24,7 @@ export default function Users() {
       }, [usersloaded]);
 
 
-      //delete handle
+      //delete handle user section
       const handleDelete = (email) => {
         if(window.confirm("Are you sure You want to delete this user ?")){
         setUsers(users.filter((users) => users.email !== email));
