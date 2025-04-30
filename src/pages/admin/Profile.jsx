@@ -12,7 +12,7 @@ export default function Profile() {
             const token = localStorage.getItem("token");
             axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/users/user`, {
                 headers: { Authorization: `Bearer ${token}` },
-            })
+            })//add try catch block
             .then((res) => {
                 console.log(res.data);
                 setUsers(res.data);
