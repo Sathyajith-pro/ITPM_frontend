@@ -26,7 +26,7 @@ export default function Profile() {
 
     // Get the last registered user
     const lastUser = Array.isArray(users) && users.length > 0 ? users[users.length - 1] : null;
-
+//resolve error on user id retrivel
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center p-6">
             <div className="w-full max-w-4xl bg-white shadow-2xl rounded-2xl overflow-hidden">
