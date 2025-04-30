@@ -9,7 +9,9 @@ import ErrorNotFound from "./error";
 import ProductOverview from "./productOverview";
 import { Footer } from "../../components/footer";
 import UserProfile from "./userProfile";
-
+import Detailsoverview from "./Adddetails";
+import Dataoverview from "../admin/Fetchdata";
+import Editoverview from "../admin/Edituser";
 export default function HomePage(){
     return(
         <>
@@ -26,8 +28,9 @@ export default function HomePage(){
               <Route path="/userPage" element = {<UserProfile/>}/>
               <Route path="/product/:key" element = {<ProductOverview/>}/>
               <Route path="/*" element = {<ErrorNotFound/>}/>
-              
-              
+              <Route path="/details" element = {<Detailsoverview/>}/>
+              <Route path="/data" element = {<Dataoverview/>}/>
+              <Route path="/edituser/:name" element = {<Editoverview/>}/>
              </Routes> 
 
              <Footer/>

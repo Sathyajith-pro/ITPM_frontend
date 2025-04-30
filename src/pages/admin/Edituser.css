@@ -1,0 +1,56 @@
+.edituser-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title Styling */
+  .edituser-title {
+    text-align: center;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Form Group */
+  .edituser-form-group {
+    margin-bottom: 15px;
+  }
+  
+  /* Label */
+  .edituser-label {
+    display: block;
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  /* Input Fields */
+  .edituser-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Submit Button */
+  .edituser-submit {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .edituser-submit:hover {
+    background-color: #0056b3;
+  }
+  
