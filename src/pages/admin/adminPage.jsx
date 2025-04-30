@@ -12,6 +12,10 @@ import Dashboard from "./dashboard";
 import UserUpdatePage from "./userUpdatePage";
 import Profile from "./Profile";
 
+import Dataoverview from "../admin/Fetchdata";
+//import Editoverview from "../admin/Edituser";
+
+
 export default function AdminPage() {
   const location = useLocation();
   
@@ -37,7 +41,7 @@ export default function AdminPage() {
             <span className="ml-3 font-medium">Dashboard</span>
           </Link>
           
-          <Link to="/admin/profile" className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 ${isActive('/admin/bookings') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-gray-100'}`}>
+          <Link to="/admin/data" className={`flex items-center px-3 py-3 rounded-lg transition-all duration-200 ${isActive('/admin/bookings') ? 'bg-indigo-50 text-indigo-600' : 'text-gray-700 hover:bg-gray-100'}`}>
             <FaTicketAlt className={`text-xl ${isActive('/admin/bookings') ? 'text-indigo-600' : 'text-gray-500'}`} />
             <span className="ml-3 font-medium">Bookings</span>
           </Link>
@@ -131,6 +135,10 @@ export default function AdminPage() {
             <Route path="/users/edit" element={<UserUpdatePage />} />
             <Route path = "/profile" element = {<Profile/>}/>
             <Route path = "/dashboard" element = {<Dashboard/>}/>
+
+            <Route path="/data" element = {<Dataoverview/>}/>
+            {/* <Route path="/edituser/:name" element = {<Editoverview/>}/> */}
+            
                  
                     
                 
