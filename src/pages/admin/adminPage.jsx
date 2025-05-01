@@ -1,7 +1,7 @@
 import { BsGraphDown } from "react-icons/bs";
 import { FaRegBookmark, FaRegUser, FaTicketAlt } from "react-icons/fa";
 import { MdOutlineSpeaker, MdDashboard, MdPeople, MdWorkOutline } from "react-icons/md";
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import AdminItemsPage from "./adminItems";
 import AddItemPage from "./addItemPage";
 import UpdateItemPage from "./updateItemPage";
@@ -11,12 +11,21 @@ import Users from "./users";
 import Dashboard from "./dashboard";
 import UserUpdatePage from "./userUpdatePage";
 import Profile from "./Profile";
+import toast from "react-hot-toast";
 
 export default function AdminPage() {
   const location = useLocation();
+  const navigate = useNavigate();
   
   const isActive = (path) => {
     return location.pathname.includes(path);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userEmail");
+    toast.success("Logged out successfully");
+    navigate("/login");
   };
   
   return (
@@ -104,7 +113,10 @@ export default function AdminPage() {
             
             <div className="h-8 w-px bg-gray-200"></div>
             
-            <button className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900">
+            <button 
+              onClick={handleLogout}
+              className="flex items-center space-x-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
               <span>Log out</span>
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>

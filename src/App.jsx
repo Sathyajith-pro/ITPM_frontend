@@ -15,7 +15,7 @@ import EditEmployee from './components/updateEmployee/editEmployee';
 import Order from './pages/Stocks/RetriveOrder/Order';
 import AddOrder from './pages/Stocks/placeOrder/AddOrder';
 import EditOrder from './pages/Stocks/updateOrder/editOrder';
-import Profile from './pages/admin/Profile';
+import Profile from './pages/profile/profile';
 
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
     <Route path = "/*" element = {<HomePage/>}/>
     <Route path = "/login" element = {<LoginPage/>}/>
     <Route path = "/register" element = {<RegisterPage/>}/>
+    <Route path = "/profile" element = {<Profile/>}/>
     
     <Route
                     path="/addpeople"
