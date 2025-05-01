@@ -1,27 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import "./Adddetails.css";  
 
 function Adddetails() {
+  const location = useLocation();
+  const priceFromProduct = location.state?.price || 0;
+  const eventName = location.state?.event || "";
+
   const [formData, setFormData] = useState({
     name: "",
     address: "",
-    event: "",
+    event: eventName,
     num_participant: "",
   });
   const [error, setError] = useState("");
 
-  const COST_PER_PARTICIPANT = 5000;  
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-     
     if (name === "num_participant") {
       if (!/^\d*$/.test(value)) {
         setError("Please enter a valid number.");
         return;
       } else {
-        setError("");  
+        setError("");
       }
     }
 
@@ -33,23 +35,22 @@ function Adddetails() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    if (!formData.num_participant || formData.num_participant <= 0) {
+
+    const num = parseInt(formData.num_participant);
+    if (!num || num <= 0) {
       setError("Participants must be at least 1.");
       return;
     }
 
-    const totalCost = formData.num_participant * COST_PER_PARTICIPANT;  
-    
-    fetch("http://localhost:5001/supplier/addsuppliers", {
+    const totalCost = num * priceFromProduct;
+
+    fetch("http://localhost:3002/supplier/addsuppliers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     }).then(() => {
-      alert(`Name: ${formData.name}\nAddress: ${formData.address}\nTotal Cost: ${totalCost} INR`);
+      alert(`Name: ${formData.name}\nAddress: ${formData.address}\nEvent: ${formData.event}\nTotal Cost: LKR ${totalCost}`);
     });
-
-    
   };
 
   return (
@@ -64,10 +65,9 @@ function Adddetails() {
           <label>Address</label>
           <textarea name="address" value={formData.address} onChange={handleChange} required></textarea>
         </div>
-         
         <div className="form-group">
           <label>Event</label>
-          <input type="text" name="event" value={formData.event} onChange={handleChange} required />
+          <input type="text" name="event" value={formData.event} onChange={handleChange} required readOnly />
         </div>
         <div className="form-group">
           <label>Number of Participants</label>

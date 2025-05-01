@@ -14,7 +14,7 @@ export default function Fetchdata() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/supplier/get");
+      const response = await axios.get("http://localhost:3002/supplier/get");
       console.log("Fetched Data:", response.data);
       setData(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
@@ -30,7 +30,7 @@ export default function Fetchdata() {
     if (!selectedUser) return;
 
     try {
-      await axios.delete(`http://localhost:5001/supplier/items/${selectedUser}`);
+      await axios.delete(`http://localhost:3002/supplier/items/${selectedUser}`);
       setNotification(`User ${selectedUser} deleted successfully!`);
       fetchData();
     } catch (error) {
