@@ -9,59 +9,50 @@ export default function UserUpdatePage() {
 
   // Initialize state with values from location state
   const [userEmail, setUserEmail] = useState(location.state.email);
-  const [userRole, setUserRole] = useState(location.state.role); // Changed from name to role
+  const [userRole, setUserRole] = useState(location.state.role);
   const [userFirstName, setUserFirstName] = useState(location.state.firstName);
   const [userLastName, setUserLastName] = useState(location.state.lastName);
   const [userAddress, setUserAddress] = useState(location.state.address);
   const [userPhone, setUserPhone] = useState(location.state.phone);
 
-  async function handleUpdateUser () {
-    console.log({
-      email: userEmail,
-      role: userRole,
-      firstName: userFirstName,
-      lastName: userLastName,
-      address: userAddress,
-      phone: userPhone,
-    });
-
+  async function handleUpdateUser() {
     const token = localStorage.getItem("token");
 
-    if (token) {
-      try {
-        const result = await axios.put(
-          `${import.meta.env.VITE_BACKEND_URL}/api/users/${userEmail}`,
-          {
-            email: userEmail,
-            role: userRole,
-            firstName: userFirstName,
-            lastName: userLastName,
-            address: userAddress,
-            phone: userPhone,
-          },
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
-        toast.success(result.data.message);
-        navigate("/admin/users/");
-      } catch (err) {
-        console.error(err); // Log the error for debugging
-        if (err.response) {
-          // The request was made and the server responded with a status code
-          toast.error(err.response.data.message || "User  not updated");
-        } else if (err.request) {
-          // The request was made but no response was received
-          toast.error("No response from server");
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          toast.error("Error: " + err.message);
-        }
-      }
-    } else {
+    if (!token) {
       toast.error("You are not authorized to do this action");
+      return;
+    }
+
+    try {
+      const result = await axios.put(
+        `${import.meta.env.VITE_BACKEND_URL}/api/users/${userEmail}`,
+        {
+          role: userRole,
+          firstName: userFirstName,
+          lastName: userLastName,
+          address: userAddress,
+          phone: userPhone,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (result.data) {
+        toast.success("User updated successfully");
+        navigate("/admin/users");
+      }
+    } catch (err) {
+      console.error(err);
+      if (err.response) {
+        toast.error(err.response.data.message || "Failed to update user");
+      } else if (err.request) {
+        toast.error("No response from server");
+      } else {
+        toast.error("Error: " + err.message);
+      }
     }
   }
 
@@ -74,54 +65,53 @@ export default function UserUpdatePage() {
           onChange={(e) => setUserEmail(e.target.value)}
           value={userEmail}
           type="text"
-          placeholder="User  Email"
-          className="border p-2 w-full rounded placeholder-gray-500"
+          placeholder="User Email"
+          className="border p-2 w-full rounded placeholder-gray-500 bg-gray-100"
         />
-        <input
+        <select
           onChange={(e) => setUserRole(e.target.value)}
           value={userRole}
-          type="text"
-          placeholder="User  Role"
           className="border p-2 w-full rounded placeholder-gray-500"
-        />
+        >
+          <option value="admin">Admin</option>
+          <option value="customer">Customer</option>
+        </select>
         <input
           onChange={(e) => setUserFirstName(e.target.value)}
           value={userFirstName}
           type="text"
-          placeholder="User  First Name"
+          placeholder="User First Name"
           className="border p-2 w-full rounded placeholder-gray-500"
         />
         <input
           onChange={(e) => setUserLastName(e.target.value)}
           value={userLastName}
           type="text"
-          placeholder="User  Last Name"
+          placeholder="User Last Name"
           className="border p-2 w-full rounded placeholder-gray-500"
         />
         <input
           onChange={(e) => setUserAddress(e.target.value)}
           value={userAddress}
           type="text"
-          placeholder="User  Address"
+          placeholder="User Address"
           className="border p-2 w-full rounded placeholder-gray-500"
         />
         <input
           onChange={(e) => setUserPhone(e.target.value)}
           value={userPhone}
           type="text"
-          placeholder="User  Phone"
+          placeholder="User Phone"
           className="border p-2 w-full rounded placeholder-gray-500"
         />
         <button
-          onClick={handleUpdateUser }
+          onClick={handleUpdateUser}
           className="bg-blue-500 text-white p-2 w-full rounded hover:bg-blue-600"
         >
           Update
         </button>
         <button
-          onClick={() => {
-            navigate("/admin/users");
-          }}
+          onClick={() => navigate("/admin/users")}
           className="bg-red-600 text-white p-2 w-full rounded hover:bg-red-700"
         >
           Cancel

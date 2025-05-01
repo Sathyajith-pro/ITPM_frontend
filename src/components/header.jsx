@@ -18,6 +18,7 @@ export default function Header() {
 
     function handleLogout() {
       localStorage.removeItem("token"); // Remove token
+      localStorage.removeItem("userEmail"); // Remove user email
       setIsAuthenticated(false);
       navigate("/"); // Redirect to home page
     }
@@ -63,7 +64,7 @@ export default function Header() {
         </nav>
 
         <div className="absolute right-5 flex items-center space-x-4">
-          {/* <div className="relative w-65 hidden md:block">
+          <div className="relative w-65 hidden md:block">
             <input 
               type="text" 
               placeholder="Search... " 
@@ -78,7 +79,7 @@ export default function Header() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-          </div> */}
+          </div>
 
           <div className="auth-buttons">
             {!isAuthenticated ? (
