@@ -8,6 +8,7 @@ function Adddetails() {
   const eventName = location.state?.event || "";
 
   const [formData, setFormData] = useState({
+    userid:"",
     name: "",
     address: "",
     event: eventName,
@@ -57,6 +58,10 @@ function Adddetails() {
     <div className="form-container">
       <h2 className="form-title">Enter Your Details</h2>
       <form onSubmit={handleSubmit} className="form">
+      <div className="form-group">
+          <label>UserID Number</label>
+          <input type="text" name="userid" value={formData.userid} onChange={handleChange} required />
+        </div>
         <div className="form-group">
           <label>Name</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} required />

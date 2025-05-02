@@ -50,6 +50,7 @@ export default function Fetchdata() {
       <table className="styled-table">
         <thead>
           <tr>
+          <th>UserID</th>
             <th>Name</th>
             <th>Address</th>
             <th>Event</th>
@@ -62,6 +63,7 @@ export default function Fetchdata() {
             data.map((user) => (
               <React.Fragment key={user.id}>
                 <tr>
+                <td>{user.userid}</td>
                   <td>{user.name}</td>
                   <td>{user.address}</td>
                   <td>{user.event}</td>
